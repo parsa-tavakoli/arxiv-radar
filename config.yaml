@@ -1,0 +1,37 @@
+# arXiv Paper Radar configuration.
+# Validated by src/radar/config.py; run `uv run radar check-config` after editing.
+
+categories:
+  - cs.CV
+  - cs.LG
+  - cs.AI
+
+# Seed papers that define the interest profile, by arXiv ID without version.
+# Starter list from the overview; extend to 8-15 papers across your interests.
+seed_papers:
+  - id: "2304.07193"
+    note: DINOv2
+  - id: "2304.02643"
+    note: Segment Anything (SAM)
+  - id: "2007.04612"
+    note: Concept Bottleneck Models
+
+# Keywords for the BM25 baseline and the re-ranker's keyword feature. Aim for 10-20.
+keywords:
+  - self-supervised learning
+  - vision transformer
+  - segmentation
+  - foundation model
+  - concept bottleneck
+  - interpretability
+
+ranking:
+  list_size: 10          # papers in the weekly "This week" top list
+  exploration_count: 3   # lower-ranked papers mixed in for unbiased feedback
+  exploration_rank_range: [20, 100]
+  min_ratings_for_reranker: 50
+
+ingest:
+  request_delay_seconds: 3.0
+  page_size: 200
+  max_retries: 5

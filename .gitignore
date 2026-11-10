@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+*.egg-info/
+dist/
+build/
+
+# Tooling
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Local data and artifacts (the real data lives on the `data` branch)
+data/
+mlruns/
+mlartifacts/
+*.duckdb
+*.duckdb.wal
+.cache/
+
+# Secrets
+.env
+.streamlit/secrets.toml
+
+# OS / editors
+.DS_Store
+.idea/
+.vscode/
