@@ -20,6 +20,10 @@ mlartifacts/
 *.duckdb.wal
 .cache/
 
+# Private planning docs (kept locally, not in the repo)
+PLAN.md
+PROJECT_OVERVIEW.md
+
 # Secrets
 .env
 .streamlit/secrets.toml

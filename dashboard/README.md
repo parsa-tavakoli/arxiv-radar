@@ -1,3 +1,3 @@
 # Dashboard
 
-Streamlit app for reading, rating and labeling papers, plus model metrics and pipeline health. Built from Phase 2 onward; see [PLAN.md](../PLAN.md).
+Streamlit app showing the weekly ranked papers, model metrics and pipeline health, plus a local-only labeling page. Built from Phase 2 onward; see the roadmap in the [main README](../README.md).

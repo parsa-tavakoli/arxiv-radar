@@ -2,8 +2,6 @@
 
 A recommender that ingests new arXiv papers in my fields every week, ranks them against a research-interest profile with scientific-text embeddings and a label-trained re-ranker, and shows the results on a public dashboard.
 
-See [PROJECT_OVERVIEW.md](PROJECT_OVERVIEW.md) for the design and [PLAN.md](PLAN.md) for the build plan.
-
 ## Roadmap
 
 **Current phase: 1 — Ingestion.** Phase 0 is complete.
