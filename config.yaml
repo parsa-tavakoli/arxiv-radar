@@ -32,6 +32,10 @@ ranking:
   min_ratings_for_reranker: 50
 
 ingest:
-  request_delay_seconds: 3.0
+  request_delay_seconds: 3.0   # arXiv's minimum between requests
   page_size: 200
   max_retries: 5
+  retry_backoff_seconds: 5.0   # doubles after each failed attempt
+  initial_lookback_days: 7     # first run, when no watermark exists yet
+  overlap_days: 7              # re-fetch before the watermark to catch late announcements
+  chunk_days: 7                # long gaps are fetched in windows of this size

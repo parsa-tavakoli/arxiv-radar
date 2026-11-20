@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom">
+  <link href="http://arxiv.org/api/query?search_query=cat:cs.CV" rel="self" type="application/atom+xml"/>
+  <title type="html">ArXiv Query: search_query=cat:cs.CV</title>
+  <id>http://arxiv.org/api/sample</id>
+  <updated>2026-11-16T00:00:00-05:00</updated>
+  <opensearch:totalResults xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/">4</opensearch:totalResults>
+  <opensearch:startIndex xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/">0</opensearch:startIndex>
+  <opensearch:itemsPerPage xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/">200</opensearch:itemsPerPage>
+
+  <!-- Version 2, primary cs.CV, cross-listed to cs.LG and cs.AI, title wrapped over lines -->
+  <entry>
+    <id>http://arxiv.org/abs/2304.07193v2</id>
+    <updated>2024-02-02T17:15:09Z</updated>
+    <published>2023-04-14T17:58:15Z</published>
+    <title>DINOv2: Learning Robust Visual Features
+  without Supervision</title>
+    <summary>  The recent breakthroughs in natural language processing for model
+pretraining on large quantities of data have opened the way for similar
+foundation models in computer vision.
+</summary>
+    <author><name>Maxime Oquab</name></author>
+    <author><name>Timothée Darcet</name></author>
+    <arxiv:comment xmlns:arxiv="http://arxiv.org/schemas/atom">TMLR</arxiv:comment>
+    <link href="http://arxiv.org/abs/2304.07193v2" rel="alternate" type="text/html"/>
+    <link title="pdf" href="http://arxiv.org/pdf/2304.07193v2" rel="related" type="application/pdf"/>
+    <arxiv:primary_category xmlns:arxiv="http://arxiv.org/schemas/atom" term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+  </entry>
+
+  <!-- Version 1, five-digit ID, primary cs.LG -->
+  <entry>
+    <id>http://arxiv.org/abs/2611.01234v1</id>
+    <updated>2026-11-12T09:00:00Z</updated>
+    <published>2026-11-12T09:00:00Z</published>
+    <title>A Small Paper About Ranking</title>
+    <summary>We study ranking.</summary>
+    <author><name>Ada Example</name></author>
+    <link href="http://arxiv.org/abs/2611.01234v1" rel="alternate" type="text/html"/>
+    <arxiv:primary_category xmlns:arxiv="http://arxiv.org/schemas/atom" term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="stat.ML" scheme="http://arxiv.org/schemas/atom"/>
+  </entry>
+
+  <!-- Old-style identifier -->
+  <entry>
+    <id>http://arxiv.org/abs/cs/0112017v1</id>
+    <updated>2001-12-20T12:00:00Z</updated>
+    <published>2001-12-20T12:00:00Z</published>
+    <title>An Old-Style Identifier</title>
+    <summary>Old papers have slashes in their IDs.</summary>
+    <author><name>Old Author</name></author>
+    <arxiv:primary_category xmlns:arxiv="http://arxiv.org/schemas/atom" term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+  </entry>
+
+  <!-- Malformed: no published date -->
+  <entry>
+    <id>http://arxiv.org/abs/2611.09999v1</id>
+    <updated>2026-11-13T09:00:00Z</updated>
+    <title>Missing Published Date</title>
+    <summary>This entry should be skipped.</summary>
+    <arxiv:primary_category xmlns:arxiv="http://arxiv.org/schemas/atom" term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.CV" scheme="http://arxiv.org/schemas/atom"/>
+  </entry>
+</feed>

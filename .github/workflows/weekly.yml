@@ -1,0 +1,67 @@
+name: Weekly pipeline
+
+on:
+  schedule:
+    # Mondays 04:17 UTC (05:17 / 06:17 in Rome), after arXiv's Sunday-evening announcement.
+    # An off-the-hour minute avoids GitHub's busiest scheduling slots.
+    - cron: "17 4 * * 1"
+  workflow_dispatch:
+    inputs:
+      since:
+        description: "Optional: fetch from this UTC date (YYYY-MM-DD) instead of the watermark"
+        required: false
+        default: ""
+
+permissions:
+  contents: write  # push to the data branch
+
+concurrency:
+  group: weekly-pipeline  # never two writers on the data branch
+  cancel-in-progress: false
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+
+      - name: Install
+        run: uv sync --locked --no-dev
+
+      - name: Check out the data branch
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git ls-remote --exit-code --heads origin data >/dev/null; then
+            # Explicit destination: a shallow single-branch checkout won't create origin/data.
+            git fetch --depth=1 origin data:refs/remotes/origin/data
+            git worktree add -B data data origin/data
+          else
+            echo "No data branch yet; creating an empty one."
+            git worktree add --orphan -b data data
+          fi
+
+      - name: Ingest
+        env:
+          SINCE: ${{ inputs.since }}
+        run: |
+          args=(--data-dir data --summary-file "$RUNNER_TEMP/summary.txt")
+          if [ -n "$SINCE" ]; then args+=(--since "$SINCE"); fi
+          uv run radar ingest "${args[@]}"
+
+      - name: Commit and push data
+        working-directory: data
+        run: |
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No data changes to commit."
+          else
+            git commit -q -m "$(cat "$RUNNER_TEMP/summary.txt")"
+            git push origin data
+          fi
+          echo "### $(cat "$RUNNER_TEMP/summary.txt")" >> "$GITHUB_STEP_SUMMARY"
