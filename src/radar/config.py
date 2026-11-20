@@ -9,10 +9,10 @@ from typing import Self
 import yaml
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
+from radar.models import ARXIV_ID_RE
+
 DEFAULT_CONFIG_PATH = Path("config.yaml")
 
-# New-style IDs (2304.07193) and old-style IDs (hep-th/9901001), without a version suffix.
-ARXIV_ID_RE = re.compile(r"^(\d{4}\.\d{4,5}|[a-z\-]+(\.[A-Z]{2})?/\d{7})$")
 CATEGORY_RE = re.compile(r"^[a-z\-]+(\.[A-Za-z\-]+)?$")
 
 
@@ -55,6 +55,15 @@ class IngestConfig(_Strict):
     request_delay_seconds: float = Field(3.0, ge=3.0)  # arXiv asks for at least 3 s
     page_size: int = Field(200, ge=1, le=2000)
     max_retries: int = Field(5, ge=0, le=20)
+    retry_backoff_seconds: float = Field(5.0, ge=0)
+    # First run with no watermark: how far back to fetch.
+    initial_lookback_days: int = Field(7, ge=1, le=365)
+    # Re-fetch this far before the watermark. A paper's timestamp is its submission time,
+    # but it only appears in the API once announced, which can be days later (weekends,
+    # holidays). Re-fetching is harmless because upserts are idempotent.
+    overlap_days: int = Field(7, ge=0, le=30)
+    # Long gaps are fetched in windows of this size; arXiv is slow on huge result sets.
+    chunk_days: int = Field(7, ge=1, le=31)
 
 
 class Config(_Strict):

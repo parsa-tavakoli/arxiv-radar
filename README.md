@@ -33,6 +33,17 @@ Enable the git hooks once:
 uv run pre-commit install
 ```
 
+## Ingesting papers
+
+A GitHub Actions workflow ([weekly.yml](.github/workflows/weekly.yml)) runs every Monday at 04:17 UTC, fetches the past week's papers from the arXiv API and commits them to the `data` branch as weekly Parquet files. To run it locally:
+
+```bash
+uv run radar ingest --data-dir data      # fetch since the last successful run
+uv run radar stats --data-dir data       # what is stored
+```
+
+`--since YYYY-MM-DD` / `--until YYYY-MM-DD` fetch a specific range. Runs are idempotent: repeating one changes nothing.
+
 ## Configuration
 
 Edit [config.yaml](config.yaml): arXiv categories, seed papers (by arXiv ID) that define the interest profile, and keywords. `uv run radar check-config` validates it.

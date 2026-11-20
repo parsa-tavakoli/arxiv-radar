@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <link href="http://arxiv.org/api/query?search_query=bad" rel="self" type="application/atom+xml"/>
+  <title type="html">ArXiv Query: search_query=bad</title>
+  <id>http://arxiv.org/api/error-sample</id>
+  <updated>2026-11-16T00:00:00-05:00</updated>
+  <opensearch:totalResults xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/">1</opensearch:totalResults>
+  <opensearch:startIndex xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/">0</opensearch:startIndex>
+  <opensearch:itemsPerPage xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/">1</opensearch:itemsPerPage>
+  <entry>
+    <id>http://arxiv.org/api/errors#max_results_must_be_less_than_or_equal_to_30000</id>
+    <title>Error</title>
+    <summary>max_results must be less than or equal to 30000</summary>
+    <updated>2026-11-16T00:00:00-05:00</updated>
+    <link href="http://arxiv.org/api/errors#max_results" rel="alternate" type="text/html"/>
+    <author><name>arXiv api core</name></author>
+  </entry>
+</feed>

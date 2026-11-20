@@ -1,12 +1,16 @@
 [project]
 name = "arxiv-radar"
 version = "0.1.0"
-description = "Personal arXiv recommender: daily ingestion, embedding-based ranking, feedback re-ranker and a dashboard."
+description = "arXiv recommender: weekly ingestion, embedding-based ranking, label-trained re-ranker and a public dashboard."
 readme = "README.md"
 requires-python = ">=3.12,<3.13"
 dependencies = [
+    "duckdb>=2.0.1",
+    "feedparser>=6.0.14",
+    "pyarrow>=26.0.1",
     "pydantic>=2.7",
     "pyyaml>=6.0",
+    "requests>=2.34.2",
     "typer>=0.12",
 ]
 
@@ -17,6 +21,7 @@ radar = "radar.cli:app"
 dev = [
     "pre-commit>=3.7",
     "pytest>=8.2",
+    "responses>=0.26.3",
     "ruff>=0.6",
 ]
 
@@ -33,6 +38,10 @@ target-version = "py312"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.ruff.lint.flake8-bugbear]
+# Typer declares CLI options as call defaults by design.
+extend-immutable-calls = ["typer.Option", "typer.Argument"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
