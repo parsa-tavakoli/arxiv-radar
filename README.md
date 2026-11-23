@@ -4,7 +4,7 @@ A recommender that ingests new arXiv papers in my fields every week, ranks them 
 
 ## Roadmap
 
-**Current phase: 1 — Ingestion.** The pipeline is live and ran for the first time on 20 Nov 2026 (2,446 papers). Phase 1 is complete once two scheduled Monday runs succeed on their own (23 and 30 Nov).
+**Current phase: 1 — Ingestion.** The pipeline is live and ran for the first time on 20 Nov 2026 (2,446 papers). GitHub dropped the first scheduled run on 23 Nov, so a backup Monday schedule was added; Phase 1 is complete once the scheduled runs on 30 Nov and 7 Dec succeed on their own.
 
 | Phase | Overview | Status |
 |---|---|---|
@@ -35,7 +35,7 @@ uv run pre-commit install
 
 ## How ingestion works
 
-The [weekly workflow](.github/workflows/weekly.yml) runs every Monday at 04:17 UTC, after arXiv's last announcement of the week (Sunday 20:00 US Eastern). Each run:
+The [weekly workflow](.github/workflows/weekly.yml) runs every Monday at 04:17 UTC, after arXiv's last announcement of the week (Sunday 20:00 US Eastern), with a backup run at 10:17 UTC in case GitHub drops the first (it runs schedules best-effort). If the early run happened, the backup finds nothing new and commits nothing. Each run:
 
 1. Reads the watermark: the time of the last successful run.
 2. Queries the arXiv API for papers in the configured categories submitted since then, 200 per page, 3 seconds between requests.

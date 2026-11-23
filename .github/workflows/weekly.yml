@@ -5,6 +5,10 @@ on:
     # Mondays 04:17 UTC (05:17 / 06:17 in Rome), after arXiv's Sunday-evening announcement.
     # An off-the-hour minute avoids GitHub's busiest scheduling slots.
     - cron: "17 4 * * 1"
+    # Backup at 10:17 UTC: GitHub runs schedules best-effort and sometimes drops them.
+    # Runs are idempotent, so if the early run happened this one finds nothing new and
+    # commits nothing; the concurrency group below prevents the two from overlapping.
+    - cron: "17 10 * * 1"
   workflow_dispatch:
     inputs:
       since:
