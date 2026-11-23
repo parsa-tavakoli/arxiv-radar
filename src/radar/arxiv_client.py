@@ -30,7 +30,20 @@ class ArxivAPIError(RuntimeError):
 
 
 class _RetryableError(Exception):
-    pass
+    def __init__(
+        self, message: str, *, rate_limited: bool = False, retry_after: float | None = None
+    ):
+        super().__init__(message)
+        self.rate_limited = rate_limited
+        self.retry_after = retry_after
+
+
+def _retry_after_seconds(value: str | None) -> float | None:
+    """Parse a numeric Retry-After header; HTTP-date values are ignored."""
+    try:
+        return max(0.0, float(value)) if value else None
+    except ValueError:
+        return None
 
 
 @dataclass(frozen=True)
@@ -137,6 +150,8 @@ class ArxivClient:
         page_size: int = 200,
         max_retries: int = 5,
         backoff_seconds: float = 5.0,
+        rate_limit_backoff_seconds: float = 60.0,
+        max_backoff_seconds: float = 600.0,
         timeout_seconds: float = 60.0,
         session: requests.Session | None = None,
         sleep: Callable[[float], None] = time.sleep,
@@ -146,6 +161,8 @@ class ArxivClient:
         self.page_size = page_size
         self.max_retries = max_retries
         self.backoff_seconds = backoff_seconds
+        self.rate_limit_backoff_seconds = rate_limit_backoff_seconds
+        self.max_backoff_seconds = max_backoff_seconds
         self.timeout_seconds = timeout_seconds
         self.session = session or requests.Session()
         # requests sets a generic "python-requests/x" agent; identify the client instead.
@@ -176,21 +193,34 @@ class ArxivClient:
         except (requests.ConnectionError, requests.Timeout) as e:
             raise _RetryableError(f"network error: {e}") from e
         if resp.status_code in _RETRYABLE_STATUS:
-            raise _RetryableError(f"HTTP {resp.status_code}")
+            raise _RetryableError(
+                f"HTTP {resp.status_code}",
+                rate_limited=resp.status_code == 429,
+                retry_after=_retry_after_seconds(resp.headers.get("Retry-After")),
+            )
         if resp.status_code != 200:
             raise ArxivAPIError(f"HTTP {resp.status_code}: {resp.text[:200]}")
         return resp.text
+
+    def _backoff(self, attempt: int, error: _RetryableError) -> float:
+        """Exponential backoff; rate limits start much higher and Retry-After is honored."""
+        base = self.rate_limit_backoff_seconds if error.rate_limited else self.backoff_seconds
+        wait = max(base * 2 ** (attempt - 1), error.retry_after or 0.0)
+        return min(wait, self.max_backoff_seconds)
 
     def fetch_page(self, query: str, start: int) -> ParsedPage:
         """Fetch one page, retrying transient failures with exponential backoff.
 
         An empty page before `total_results` is reached is treated as transient: the arXiv
         API occasionally returns one mid-result, and accepting it would silently drop papers.
+        HTTP 429 ("Rate exceeded") gets a longer backoff: arXiv's front end throttles in
+        bursts that can last a few minutes.
         """
-        last_error: Exception | None = None
+        last_error: _RetryableError | None = None
         for attempt in range(self.max_retries + 1):
             if attempt:
-                backoff = self.backoff_seconds * 2 ** (attempt - 1)
+                assert last_error is not None
+                backoff = self._backoff(attempt, last_error)
                 log.warning(
                     "retry %d/%d at start=%d in %.0fs: %s",
                     attempt,

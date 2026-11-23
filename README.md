@@ -47,7 +47,7 @@ Design choices:
 
 - **Idempotent.** Repeating a run changes nothing, so a failed week is safely caught up by the next run.
 - **7-day overlap.** Each run re-fetches the week before the watermark, because a paper only appears in the API once announced, which can be days after its submission time (weekends, holidays).
-- **Fails loudly.** API errors and empty pages mid-result are retried with exponential backoff. If retries run out, the job fails, the watermark stays put and GitHub sends an email.
+- **Fails loudly.** API errors and empty pages mid-result are retried with exponential backoff; HTTP 429 (arXiv throttling, which comes in bursts of a minute or more) backs off from 60 s up to 10 min and honors `Retry-After`. If retries run out, the job fails, the watermark stays put and GitHub sends an email.
 - **Known limitation.** The API's `lastUpdatedDate` filter behaves exactly like `submittedDate` (verified: identical result sets), so revisions of older papers cannot be found by date. New papers, which are what the radar ranks, are all captured.
 
 The workflow can also be started by hand from the Actions tab (**Weekly pipeline → Run workflow**), optionally with a start date.

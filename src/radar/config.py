@@ -56,6 +56,9 @@ class IngestConfig(_Strict):
     page_size: int = Field(200, ge=1, le=2000)
     max_retries: int = Field(5, ge=0, le=20)
     retry_backoff_seconds: float = Field(5.0, ge=0)
+    # HTTP 429 means arXiv is throttling; bursts can last minutes, so back off harder.
+    rate_limit_backoff_seconds: float = Field(60.0, ge=0)
+    max_backoff_seconds: float = Field(600.0, gt=0)
     # First run with no watermark: how far back to fetch.
     initial_lookback_days: int = Field(7, ge=1, le=365)
     # Re-fetch this far before the watermark. A paper's timestamp is its submission time,

@@ -82,6 +82,8 @@ def ingest(
         page_size=ic.page_size,
         max_retries=ic.max_retries,
         backoff_seconds=ic.retry_backoff_seconds,
+        rate_limit_backoff_seconds=ic.rate_limit_backoff_seconds,
+        max_backoff_seconds=ic.max_backoff_seconds,
     )
     try:
         report = run_ingest(cfg, Store(data_dir), client, since=_utc(since), until=_utc(until))

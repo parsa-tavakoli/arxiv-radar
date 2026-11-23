@@ -199,3 +199,30 @@ def test_sends_user_agent():
     responses.add(responses.GET, API_URL, body=feed_xml([], total=0))
     make_client(FakeClock()).fetch_window(["cs.CV"], START, END)
     assert responses.calls[0].request.headers["User-Agent"].startswith("arxiv-radar/")
+
+
+@responses.activate
+def test_rate_limit_uses_longer_backoff():
+    responses.add(responses.GET, API_URL, status=429, body="Rate exceeded.")
+    responses.add(responses.GET, API_URL, status=429, body="Rate exceeded.")
+    responses.add(responses.GET, API_URL, body=feed_xml([entry_xml("2611.00001")], total=1))
+    clock = FakeClock()
+    client = make_client(clock, rate_limit_backoff_seconds=60.0, max_backoff_seconds=600.0)
+
+    result = client.fetch_window(["cs.CV"], START, END)
+
+    assert len(result.papers) == 1
+    assert [s for s in clock.sleeps if s >= 60] == [60.0, 120.0]
+
+
+@responses.activate
+def test_retry_after_header_is_honored_and_capped():
+    responses.add(responses.GET, API_URL, status=503, headers={"Retry-After": "90"})
+    responses.add(responses.GET, API_URL, status=429, headers={"Retry-After": "5000"})
+    responses.add(responses.GET, API_URL, body=feed_xml([], total=0))
+    clock = FakeClock()
+    client = make_client(clock, backoff_seconds=5.0, max_backoff_seconds=600.0)
+
+    client.fetch_window(["cs.CV"], START, END)
+
+    assert [s for s in clock.sleeps if s > 3.0] == [90.0, 600.0]
