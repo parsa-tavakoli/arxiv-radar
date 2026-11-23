@@ -1,5 +1,5 @@
 [project]
-name = "arxiv-radar"
+name = "paper-radar"
 version = "0.1.0"
 description = "arXiv recommender: weekly ingestion, embedding-based ranking, label-trained re-ranker and a public dashboard."
 readme = "README.md"

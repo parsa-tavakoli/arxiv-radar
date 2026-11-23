@@ -1,4 +1,4 @@
-# arXiv Paper Radar configuration.
+# Paper Radar configuration.
 # Validated by src/radar/config.py; run `uv run radar check-config` after editing.
 
 categories:

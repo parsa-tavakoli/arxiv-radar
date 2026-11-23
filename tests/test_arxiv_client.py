@@ -198,7 +198,7 @@ def test_api_error_feed_is_not_retried(fixture_text):
 def test_sends_user_agent():
     responses.add(responses.GET, API_URL, body=feed_xml([], total=0))
     make_client(FakeClock()).fetch_window(["cs.CV"], START, END)
-    assert responses.calls[0].request.headers["User-Agent"].startswith("arxiv-radar/")
+    assert responses.calls[0].request.headers["User-Agent"].startswith("paper-radar/")
 
 
 @responses.activate

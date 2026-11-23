@@ -1,6 +1,6 @@
-# arXiv Paper Radar
+# Paper Radar
 
-A recommender that ingests new arXiv papers in my fields every week, ranks them against a research-interest profile with scientific-text embeddings and a label-trained re-ranker, and shows the results on a public dashboard.
+A weekly recommender for arXiv papers: it ingests new papers in my fields every week, ranks them against a research-interest profile with scientific-text embeddings and a label-trained re-ranker, and shows the results on a public dashboard.
 
 ## Roadmap
 
@@ -98,3 +98,9 @@ src/radar/
 tests/                unit and end-to-end tests (no network)
 .github/workflows/    ci.yml (lint + tests), weekly.yml (pipeline)
 ```
+
+## Acknowledgement
+
+Thank you to arXiv for use of its open access interoperability.
+
+Paper Radar uses arXiv's public API and metadata, which arXiv releases under CC0. It is an independent project: it has not been reviewed or approved by arXiv and does not necessarily reflect arXiv's policies or opinions. Paper titles and abstracts link back to their pages on [arxiv.org](https://arxiv.org).

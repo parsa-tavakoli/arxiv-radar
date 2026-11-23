@@ -21,7 +21,7 @@ from radar.models import Paper, split_arxiv_id
 log = logging.getLogger(__name__)
 
 API_URL = "https://export.arxiv.org/api/query"
-USER_AGENT = f"arxiv-radar/{__version__}"
+USER_AGENT = f"paper-radar/{__version__}"
 _RETRYABLE_STATUS = {429, 500, 502, 503, 504}
 
 

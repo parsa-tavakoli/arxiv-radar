@@ -11,7 +11,7 @@ from pydantic import ValidationError
 
 from radar.config import DEFAULT_CONFIG_PATH, Config, load_config
 
-app = typer.Typer(help="arXiv Paper Radar pipeline commands.", no_args_is_help=True)
+app = typer.Typer(help="Paper Radar pipeline commands.", no_args_is_help=True)
 
 ConfigOption = typer.Option(DEFAULT_CONFIG_PATH, "--config", "-c", help="Path to config.yaml.")
 DataDirOption = typer.Option(
